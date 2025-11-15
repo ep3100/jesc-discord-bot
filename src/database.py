@@ -19,11 +19,6 @@ class Sentence(Base):
     japanese: Mapped[str] = mapped_column(Text, nullable=False)
     english: Mapped[str] = mapped_column(Text, nullable=False)
 
-    # indexing for faster searching
-    __table_args__ = (
-        Index('idx_japanese_text', 'japanese'),
-    )
-
     def __repr__(self) -> str:
         return f"<Sentence(id={self.id}, ja='{self.japanese[:30]}...')>"
     

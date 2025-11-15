@@ -83,18 +83,20 @@ async def sentence_command(
     # try exact match first
     results = db.search_by_word(normalized_word, limit=limit)
 
+    # filter to only sentences that actually contain the word
+    if results:
+        results = [(ja, en) for ja, en in results if normalized_word in ja]
+
     # if no match, try partial
     if not results:
         logger.info(f"No exact match for '{normalized_word}', trying partial match...")
-        results = db.search_by_partial_word(normalized_word, limit=limit)
+        results = db.search_by_partial_word(normalized_word, limit=limit * 2)
 
-    # if still no results, try getting lemma
-    if not results:
-        lemmas = tokenizer.get_lemmas(normalized_word)
-        if lemmas:
-            lemma = list(lemmas)[0]
-            logger.info(f"Trying lemma '{lemma}'...")
-            results = db.search_by_word(lemma, limit=limit)
+        # verity search term
+        if results:
+            results = [(ja, en) for ja, en in results if normalized_word in ja]
+            # limit after filtering
+            results = results[:limit]
 
     # create response embed
     if results:
@@ -125,7 +127,7 @@ async def sentence_command(
         )
         embed.add_field(
             name="💡 Tips",
-            values=(
+            value=(
                 "- Try the dictionary form (e.g. 食べる instead of 食べた)\n"
                 "- Check for typos\n"
                 "- Try a more common word or synonym\n"
