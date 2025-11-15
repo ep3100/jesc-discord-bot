@@ -86,26 +86,37 @@ class JapaneseTokenizer:
         
     def get_lemmas_with_surface(self, text: str) -> Set[str]:
         """
-        extract both lemmas and surface forms for better matching
+        extract both lemmas, surface forms, and n-grams for better matching
         helps with conjugated forms users may search for
 
         args: 
             text: input japanese text
 
         returns:
-            set of unique words (both lemmas and surface words)
+            set of unique words (both lemmas surface words, and n-grams)
         """
 
         text = self.normalize(text)
         words = set()
 
         try:
-            for word in self.tagger(text):
+            tokens = list(self.tagger(text))
+            for word in tokens:
                 words.add(word.surface)
                 lemma = word.feature.lemma
 
                 if lemma and lemma != '*':
                     words.add(lemma)
+
+            # 2-grams
+            for i in range(len(tokens) - 1):
+                bigram = tokens[i].surface + tokens[i + 1].surface
+                words.add(bigram)
+
+            # 3-grams
+            for i in range(len(tokens) - 2):
+                trigram = tokens[i].surface + tokens[i + 1].surface + tokens[i + 2].surface
+                words.add(trigram)
 
             return words
         except Exception as e:

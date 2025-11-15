@@ -55,6 +55,14 @@ def read_jesc_file(csv_path: str, limit: int = None) -> List[Tuple[str, str]]:
                 if not ja_text or not en_text:
                     continue
 
+                # skip rows with newlines or tabs
+                if '\n' in ja_text or '\t' in ja_text or '\n' in en_text or '\t' in en_text:
+                    continue   
+
+                # skip overly long sentences (likely corrupt)
+                if len(ja_text) > 300 or len(en_text) > 300:
+                    continue 
+
                 sentences.append((ja_text, en_text))
 
                 # progress update every 100k lines

@@ -83,26 +83,29 @@ async def sentence_command(
     # try exact match first
     results = db.search_by_word(normalized_word, limit=limit)
 
-    # filter to only sentences that actually contain the word
+    """
+    # filter to only sentences that actually contain the word. maybe not needed after ngrams
     if results:
-        results = [(ja, en) for ja, en in results if normalized_word in ja]
+         results = [(ja, en) for ja, en in results if normalized_word in ja]
+    """
 
     # if no match, try partial
     if not results:
         logger.info(f"No exact match for '{normalized_word}', trying partial match...")
         results = db.search_by_partial_word(normalized_word, limit=limit * 2)
 
-        # verity search term
+        """
+        # verity search term. maybe not needed after ngrams
         if results:
             results = [(ja, en) for ja, en in results if normalized_word in ja]
             # limit after filtering
             results = results[:limit]
-
+        """
     # create response embed
     if results:
         embed = discord.Embed(
             title=f"Example sentence for: {word}",
-            description=f"Fuond {len(results)} example(s) from Japanese subtitles",
+            description=f"Found {len(results)} example(s) from Japanese subtitles",
             color=discord.Color.blue()
         )
 
