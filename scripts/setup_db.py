@@ -36,7 +36,7 @@ def main():
         logger.info("Database setup complete!")
         logger.info("Next steps:")
         logger.info("  1. Download JESC corpus from Kaggle")
-        logger.info("  2. Place train.ja and train.en in the data/ directory")
+        logger.info("  2. Place train.csv in the data/ directory")
         logger.info("  3. Run: python -m src.loader")
     
     except ValueError as e:

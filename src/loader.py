@@ -9,8 +9,8 @@ from pathlib import Path
 from tqdm import tqdm
 from typing import List, Tuple
 
-from database import db
-from tokenizer import get_lemmas_with_surface
+from src.database import db
+from src.tokenizer import get_lemmas_with_surface
 from config import config
 
 logging.basicConfig(
@@ -38,15 +38,18 @@ def read_jesc_file(csv_path: str, limit: int = None) -> List[Tuple[str, str]]:
 
     try:
         with open(csv_path, 'r', encoding='utf-8') as csv_file:
-            reader = csv.DictReader(csv_file)
+            reader = csv.reader(csv_file)
 
             for line_num, row in enumerate(reader, 1):
                 if limit and line_num > limit:
                     break
 
+                if len(row) < 3:
+                    continue
+
                 # get eng and jap from cols
-                en_text = row.get('eng', '').strip()
-                ja_text = row.get('jp', '').strip()
+                en_text = row[1].strip()
+                ja_text = row[2].strip()
 
                 # skip empty lines
                 if not ja_text or not en_text:

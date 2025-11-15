@@ -8,8 +8,8 @@ from discord.ext import commands
 import logging
 import sys
 
-from database import db
-from tokenizer import tokenizer, normalize_text
+from src.database import db
+from src.tokenizer import tokenizer, normalize_text
 from config import config
 
 # logging

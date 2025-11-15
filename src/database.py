@@ -21,7 +21,7 @@ class Sentence(Base):
 
     # indexing for faster searching
     __table_args__ = (
-        Index('idx_japanese_txt', 'japanese')
+        Index('idx_japanese_text', 'japanese'),
     )
 
     def __repr__(self) -> str:
@@ -37,7 +37,7 @@ class WordIndex(Base):
     sentence_id: Mapped[int] = mapped_column(nullable=False, index=True)
 
     __table_args__ = (
-        Index('idx_word_sentence', 'word', 'sentence_id')
+        Index('idx_word_sentence', 'word', 'sentence_id'),
     )
 
     def __repr__(self):
