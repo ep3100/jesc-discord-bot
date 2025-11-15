@@ -30,8 +30,7 @@ class Config:
     
     # data paths
     DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
-    JESC_JA_PATH = os.path.join(DATA_DIR, 'train.ja')
-    JESC_EN_PATH = os.path.join(DATA_DIR, 'train.en')
+    JESC_CSV_PATH = os.path.join(DATA_DIR, 'train.csv')
     
     def validate(self):
         """Validate that required configuration is set"""
